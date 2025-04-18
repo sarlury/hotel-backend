@@ -16,11 +16,16 @@ export const resolvers = {
     },
 
     updateHotel: async (_: any, args: any) => {
-      const hotel = await hotelRepository.findOneBy({ id: Number(args.id) });
+      const { id, ...updateFields } = args;
+    
+      const hotel = await hotelRepository.findOneBy({ id: Number(id) });
       if (!hotel) throw new Error('Hotel not found');
-      Object.assign(hotel, args);
+    
+      Object.assign(hotel, updateFields);
+    
       return await hotelRepository.save(hotel);
     },
+    
 
     softDeleteHotel: async (_: any, { id }: { id: number }) => {
       const hotel = await hotelRepository.findOneBy({ id });
